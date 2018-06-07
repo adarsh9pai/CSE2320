@@ -2,6 +2,20 @@
 #include <stdlib.h>
 
 
+void AscendingIndexValue(int *map, int *index, int *count, int n){
+    int i = 0;
+    for(i=0;i<n;i++){
+        printf("%d %d\n", i, count[map[i]]);
+    }
+}
+
+void AscendingCounterValue(int *index, int *count, int n){
+    int i = 0;
+    for(i=0;i<n;i++){
+        printf("%d %d\n", index[i], count[i]);
+    }
+}
+
 int main(){
 
 char line[100];
@@ -31,11 +45,13 @@ while(j==0){
     if(operation == 0){
         j = 1;
     }
-    switch(operation){
+    else{
+        switch(operation){
         case 1:
-            
+            AscendingIndexValue(map,index,count,n);
             break;
         case 2:
+            AscendingCounterValue(index,count,n);
             break;
         case 3:
             arg1 = strtol(ptr, &ptr, 10);
@@ -55,6 +71,8 @@ while(j==0){
         default:
             break;
     }
+    }
+    
     //printf("\n");
 }
 

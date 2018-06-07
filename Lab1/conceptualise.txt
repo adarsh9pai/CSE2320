@@ -1,0 +1,15 @@
+ - Counters from 0 to n-1.
+ - n will be a non-negative value.
+ - Last line in the file will contain a 0.
+ - First Operation: Print the counters in ascending counter value. Linear.
+ - Second Operation: Print the counters in ascending index value. Linear.
+ - Third Operation: Add one to the counter indexed by i. O(log n).
+ - Fourth Operation: Substract from the counter indexed by i. O(log n).
+ - Fifth Operation: (i,j) Determine number of arguments where counters>=i & counters<=j
+
+	
+	Let's say n = 5
+	The map[] array will be used to get to a certain position in the column.
+
+
+	

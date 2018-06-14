@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 int BinarySearchLast(int arr[], int low, int high, int n, int len){
 
     if(high>=low){
@@ -20,6 +22,26 @@ int BinarySearchLast(int arr[], int low, int high, int n, int len){
     }
 }
 
+int BinarySearchFirst(int arr[], int low, int high, int n, int len){
+
+    int ret = -1;
+
+    while(low<=high){
+        int mid = (low+high)/2;
+        if(n == arr[mid]){
+            ret = mid;
+            high = mid-1;
+        }
+        else if(n < arr[mid]){
+            high = mid-1;
+        }
+        else{
+            low = mid + 1;
+        }
+    }
+
+    return ret;
+}
 
 void AscendingIndexValue(int *map, int *index, int *count, int n){
     int i = 0;
@@ -37,31 +59,55 @@ void AscendingCounterValue(int *index, int *count, int n){
 
 void IncrementByIndex(int *map,int *index, int *count, int n,int length){
 
-      int first = 0, last = length-1;
-      int x = BinarySearchLast(count,first,last,count[n],length);
-      int temp;
+     int p = map[n];
 
-      temp = index[n];
-      index[n] = index[x];
-      index[x] = temp;
+     int first = 0, last = length-1;
+     int x = BinarySearchLast(count, first, last, count[p], length);
+     int temp;
 
-      temp = map[n];
-      map[n] = map[x];
-      map[n] = temp;
-      
-      count[x] += 1;
+     temp = index[p];
+     index[p] = index[x];
+     index[x] = temp;
 
+     temp = map[index[p]];
+     map[index[p]] = map[index[x]];
+     map[index[x]] = temp;
+
+     count[x] += 1;
 }
 
 void DecrementByIndex(int *map,int *index, int *count, int n,int length){
-      
+    
+     int p = map[n];
+
+     int first = 0, last = length-1;
+     int x = BinarySearchFirst(count, first, last, count[p], length);
+     int temp;
+
+     temp = index[p];
+     index[p] = index[x];
+     index[x] = temp;
+
+     temp = map[index[p]];
+     map[index[p]] = map[index[x]];
+     map[index[x]] = temp;
+
+     count[x] -= 1;
 
 }
 
-int NumberOfCounters(int *counter, int i, int j, int n){
+int NumberOfCounters(int *count, int i, int j, int n){
 
-   int count=0;
-   return count;
+    int x = BinarySearchFirst(count,0,(n-1),i,n);
+    int y = BinarySearchLast(count,0,(n-1),j,n);
+    //printf("%d,%d\n",x,y);
+    if(x == -1 || y == -1){
+        return 1;
+    }
+    else{
+        return (y-x)+1;
+    }
+    
 }
 
 int main(){
@@ -111,14 +157,15 @@ while(j==0){
             break;
         case 4:
             arg1 = strtol(ptr, &ptr, 10);
-         //   printf(" %d",arg1);
+            DecrementByIndex(map,index,count,arg1,n);
             break;
         case 5:
             arg1 = strtol(ptr, &ptr, 10);
             arg2 = strtol(ptr, &ptr, 10);
-        //    printf(" %d",arg1);
-        //    printf(" %d",arg2);
-            break;
+            int num = NumberOfCounters(count,arg1,arg2,n);
+            
+            printf("%d counters between %d and %d\n", num, arg1,arg2);
+            printf("-------\n");
             break;
         default:
             break;

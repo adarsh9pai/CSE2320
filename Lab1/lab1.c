@@ -1,3 +1,14 @@
+/*
+
+Name: Adarsh Yogesh Pai
+Class: CSE 2320 
+Instructor: Dr.Weems
+Homework 1
+ID: 1001530167
+NetID: ayp0167
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -96,28 +107,78 @@ void DecrementByIndex(int *map,int *index, int *count, int n,int length){
 
 }
 
+int ClosestToNum(int x,int y, int val){
+    return val-x>=y-val?y:x;
+}
+
+int FindNear(int arr[], int val, int n){
+
+    int left = 0,right = n - 1, mid = 0;    
+    if(val >= arr[n-1]){
+        return arr[n-1];
+    }
+    if(val<=arr[0]){
+        return arr[0];
+    }
+    while(left<right){
+        mid = (left+right)/2;
+        if(val<arr[mid]){
+            right = mid;
+        }
+        else if(val>arr[mid]){
+            left=mid+1;
+        }
+        else{
+            return arr[mid];
+        }
+    }
+    if(val<arr[mid]){
+        return ClosestToNum(arr[mid-1],arr[mid],val);
+    }
+    else{
+        return ClosestToNum(arr[mid],arr[mid+1],val);
+    }
+
+}
+
 int NumberOfCounters(int *count, int i, int j, int n){
 
     int x = BinarySearchFirst(count,0,(n-1),i,n);
     int y = BinarySearchLast(count,0,(n-1),j,n);
-    //printf("%d,%d\n",x,y);
-    if(x == -1 || y == -1){
-        return 1;
+
+    if(x==-1&&y==-1){
+     int z1 = FindNear(count,i,n);
+     int z2 = FindNear(count,j,n);
+      x = BinarySearchFirst(count,0,(n-1),z1,n);
+      y = BinarySearchFirst(count,0,(n-1),z2,n);
+      return (y-x)+1;
+    }
+    else if(x==-1){
+        
+      int z = FindNear(count,i,n);
+      x = BinarySearchFirst(count,0,(n-1),z,n);
+      return (y-x)+1;
+
+    }
+    else if(y==-1){
+      int z = FindNear(count,j,n);
+      y = BinarySearchFirst(count,0,(n-1),z,n);
+      return (y-x);
     }
     else{
         return (y-x)+1;
     }
-    
+      
 }
 
 int main(){
 
-char line[100];
+char line[1000];
 char *ptr;
 fgets(line,sizeof(line),stdin);
 
 int n = strtol(line, &ptr, 10);
-//printf("%d\n",n);
+
 
 int *map = (int *)malloc(n * sizeof(int));
 int *index = (int *)malloc(n * sizeof(int));
@@ -135,7 +196,7 @@ while(j==0){
 
     fgets(line,sizeof(line),stdin);
     int operation = strtol(line, &ptr, 10);
-   // printf("%d", operation);
+   
     if(operation == 0){
         j = 1;
     }
@@ -165,18 +226,19 @@ while(j==0){
             int num = NumberOfCounters(count,arg1,arg2,n);
             
             printf("%d counters between %d and %d\n", num, arg1,arg2);
-            printf("-------\n");
+            printf("\n");
             break;
         default:
             break;
     }
     }
     
-    //printf("\n");
+    
 }
 
 free(map);
 free(index);
 free(count);
+
 
 }

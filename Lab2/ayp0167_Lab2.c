@@ -39,7 +39,7 @@ void Exchange(int i,int j){
 }
 
 int more(int i,int j){
-    return strcmp(heapArrayPointer[pq[i]], heapArrayPointer[pq[j]])>=0?1:0;
+    return strcmp(heapArrayPointer[pq[i]], heapArrayPointer[pq[j]])>0?1:0;
 }
 
 void heapIncreaseKey(int *pq,int x){
@@ -55,11 +55,35 @@ void minHeapInsert(int x){
     heapIncreaseKey(pq,N);
 }
 
+void minHeapify(int *pq, int k, int N){
+    int j = Left(k);
+    if (j < N && more(j, j+1))
+        j=Right(k);
+    if (!more(k, j))
+    {
+        return;
+    }
+    Exchange(k, j);
+    k = j;
+}
+
+void minHeapChange(int k){
+    heapIncreaseKey(pq, qp[k]); 
+    minHeapify(pq, qp[k], N);
+}
+
+int heapExtractMin()
+{ 
+    Exchange(1, N); 
+    minHeapify(pq, 1, --N); 
+    qp[pq[N+1]]=(-1);  
+    return pq[N+1]; 
+}
 
 
 int main(){
 
-    int i = 0,n;
+    int i = 0,n,fileExhaustionCount = 0;
     char line[50];
     FILE *fileNamePointer;
 
@@ -81,6 +105,8 @@ int main(){
         Files[i] = fopen(file_names[i],"r");
         
     }
+    FILE *filePrinter = fopen("output.dat","w");
+
 
     char **heapArray = malloc(n*sizeof(char*));
 
@@ -101,7 +127,29 @@ int main(){
   printf("----handles (qp)-----\n");
   for (i=0;i<n;i++)
     printf("%d %d\n",i,qp[i]);
-   
+    /*
+    int b = heapExtractMin();
+    fprintf(filePrinter,"%s %d\n",heapArray[b],1);
+    strcpy(heapArray[b],"unused or removed\n");
+
+    printf("\n%d\n",b);
+    */
+     printf("----table (priority) active entries----\n");
+  for (i=0;i<n;i++)
+    printf("%d %s",i,heapArray[i]);
+  printf("----heap (pq)-----\n");
+  for (i=1;i<=N;i++)
+    printf("%d %d\n",i,pq[i]);
+  printf("----handles (qp)-----\n");
+  for (i=0;i<n;i++)
+    printf("%d %d\n",i,qp[i]);
+    /*
+
+    while(fileExhaustionCount < n){
+        int stringOccurence = 1;
+
+    }
+   */
 
     for(i = 0;i<n;i++){
         free(file_names[i]);
@@ -114,5 +162,6 @@ int main(){
     for(i = 0;i<n;i++){
         fclose(Files[i]);
     }
+    fclose(filePrinter);
     
 }

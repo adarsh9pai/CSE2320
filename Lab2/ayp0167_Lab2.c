@@ -39,7 +39,7 @@ void Exchange(int i,int j){
 }
 
 int more(int i,int j){
-    return heapArrayPointer[pq[i]]>heapArrayPointer[pq[j]];
+    return strcmp(heapArrayPointer[pq[i]], heapArrayPointer[pq[j]])>=0?1:0;
 }
 
 void heapIncreaseKey(int *pq,int x){

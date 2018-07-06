@@ -56,20 +56,20 @@ void minHeapInsert(int x){
 }
 
 void minHeapify(int *pq, int k, int N){
-    int j = Left(k);
-    if (j < N && more(j, j+1))
-        j=Right(k);
-    if (!more(k, j))
+    
+    while (Left(k) <= N)
     {
-        return;
+        int j = Left(k);
+        if (j < N && more(j, j+1))
+            j=Right(k);
+        if (!more(k, j))
+        {
+            return;
+        }
+        Exchange(k, j);
+        k = j;
     }
-    Exchange(k, j);
-    k = j;
-}
 
-void minHeapChange(int k){
-    heapIncreaseKey(pq, qp[k]); 
-    minHeapify(pq, qp[k], N);
 }
 
 int heapExtractMin()
@@ -80,6 +80,38 @@ int heapExtractMin()
     return pq[N+1]; 
 }
 
+void Heapify(int *pq,int size, int x)
+{
+    int Largest = x;  
+    int Left = 2*x + 1; 
+    int Right = 2*x + 2;  
+    if (Left < size && pq[Left] > pq[Largest])
+    {
+        Largest = Left;
+    }
+    if (Right < size && pq[Right] > pq[Largest])
+    {
+        Largest = Right;
+    }
+    if (Largest != x)
+    {
+        Exchange(pq[x], pq[Largest]);
+        Heapify(pq, size, Largest);
+    }
+}
+
+void heapSort()
+{
+    int n = sizeof(*pq)/sizeof(int),i = 0;
+    for (int i = n / 2 - 1; i >= 0; i--)
+    {
+        minHeapify(pq, n, i);
+    }
+    {
+        Exchange(pq[0], pq[i]);
+        Heapify(pq, i, 0);
+    }
+}
 
 int main(){
 
@@ -120,61 +152,35 @@ int main(){
     }
 
 
-        /*
-        char previousMinimum[50];
-        int k = 0;
+       char minimum[51] = " "; 
+       while(fileExhaustionCount<n){
+        int k = 1;   
         int extract = heapExtractMin();
-        strcpy(previousMinimum,heapArray[extract]);
-        if(strcmp(heapArray[extract],previousMinimum)!=0){
-            strcpy(previousMinimum,heapArray[extract]);
+        strcpy(line,heapArray[extract]);
+        line[ strcspn(line, "\r\n") ] = 0;
+        if(strcmp(minimum,heapArray[extract])==0){
+             k++;
         }
         else{
-            k++;
-        }
-      //  fprintf(filePrinter,"%s %d",heapArray[extract],k);
-        if(feof(Files[extract])){
-            fileExhaustionCount++;
-            fclose(Files[extract]);
-        }
-        else{
-            fgets(line,50,Files[extract]);
+            fprintf(filePrinter,"%s \n",heapArray[extract]);
+            strcpy(line,heapArray[extract]);
             line[ strcspn(line, "\r\n") ] = 0;
-            strcpy(heapArray[extract],line);
-            minHeapInsert(extract);
+            strcpy(minimum,line);
         }
+            if(Files[extract]==NULL || feof(Files[extract])){
+                fileExhaustionCount++;
+            }
+            else{
+                fgets(line,50,Files[extract]);
+                line[ strcspn(line, "\r\n") ] = 0;
+                strcpy(heapArray[extract],line);
+                minHeapInsert(extract);
+                heapSort();
+            }    
+        }
+       
+       
 
-       
-        */
-       while(fileExhaustionCount<=n){
-           int extract = heapExtractMin();
-           if(Files[extract]==NULL || feof(Files[extract])){
-               fileExhaustionCount++;
-           }
-           else{
-               fprintf(filePrinter,"%s\n",heapArray[extract]);
-               fgets(line,50,Files[extract]);
-               line[ strcspn(line, "\r\n") ] = 0;
-               strcpy(heapArray[extract],line);
-               minHeapInsert(extract);
-               
-           }
-       }
-        //Remaining Strings
-        for(i = 0;i<n;i++){
-            fprintf(filePrinter,"%s\n",heapArray[i]);
-        }
-       /*
-       
-      printf("----table (priority) active entries----\n");
-  for (i=0;i<n;i++)
-    printf("%d %s",i,heapArray[i]);
-  printf("----heap (pq)-----\n");
-  for (i=1;i<=N;i++)
-    printf("%d %d\n",i,pq[i]);
-  printf("\n----handles (qp)-----\n");
-  for (i=0;i<n;i++)
-    printf("%d %d\n",i,qp[i]);
-    */
     for(i = 0;i<n;i++){
         free(file_names[i]);
     }

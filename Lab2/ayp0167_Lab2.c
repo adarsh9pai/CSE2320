@@ -113,44 +113,68 @@ int main(){
     minHeapInit(heapArray,n);
     for(i = 0;i<n;i++){
         fgets(line,50,Files[i]);
+        line[ strcspn(line, "\r\n") ] = 0;
         heapArray[i] = malloc(sizeof(char)*50);
         strcpy(heapArray[i],line);
         minHeapInsert(i);
     }
 
-    printf("----table (priority) active entries----\n");
+
+        /*
+        char previousMinimum[50];
+        int k = 0;
+        int extract = heapExtractMin();
+        strcpy(previousMinimum,heapArray[extract]);
+        if(strcmp(heapArray[extract],previousMinimum)!=0){
+            strcpy(previousMinimum,heapArray[extract]);
+        }
+        else{
+            k++;
+        }
+      //  fprintf(filePrinter,"%s %d",heapArray[extract],k);
+        if(feof(Files[extract])){
+            fileExhaustionCount++;
+            fclose(Files[extract]);
+        }
+        else{
+            fgets(line,50,Files[extract]);
+            line[ strcspn(line, "\r\n") ] = 0;
+            strcpy(heapArray[extract],line);
+            minHeapInsert(extract);
+        }
+
+       
+        */
+       while(fileExhaustionCount<=n){
+           int extract = heapExtractMin();
+           if(Files[extract]==NULL || feof(Files[extract])){
+               fileExhaustionCount++;
+           }
+           else{
+               fprintf(filePrinter,"%s\n",heapArray[extract]);
+               fgets(line,50,Files[extract]);
+               line[ strcspn(line, "\r\n") ] = 0;
+               strcpy(heapArray[extract],line);
+               minHeapInsert(extract);
+               
+           }
+       }
+        //Remaining Strings
+        for(i = 0;i<n;i++){
+            fprintf(filePrinter,"%s\n",heapArray[i]);
+        }
+       /*
+       
+      printf("----table (priority) active entries----\n");
   for (i=0;i<n;i++)
     printf("%d %s",i,heapArray[i]);
   printf("----heap (pq)-----\n");
   for (i=1;i<=N;i++)
     printf("%d %d\n",i,pq[i]);
-  printf("----handles (qp)-----\n");
+  printf("\n----handles (qp)-----\n");
   for (i=0;i<n;i++)
     printf("%d %d\n",i,qp[i]);
-    /*
-    int b = heapExtractMin();
-    fprintf(filePrinter,"%s %d\n",heapArray[b],1);
-    strcpy(heapArray[b],"unused or removed\n");
-
-    printf("\n%d\n",b);
     */
-     printf("----table (priority) active entries----\n");
-  for (i=0;i<n;i++)
-    printf("%d %s",i,heapArray[i]);
-  printf("----heap (pq)-----\n");
-  for (i=1;i<=N;i++)
-    printf("%d %d\n",i,pq[i]);
-  printf("----handles (qp)-----\n");
-  for (i=0;i<n;i++)
-    printf("%d %d\n",i,qp[i]);
-    /*
-
-    while(fileExhaustionCount < n){
-        int stringOccurence = 1;
-
-    }
-   */
-
     for(i = 0;i<n;i++){
         free(file_names[i]);
     }
@@ -159,9 +183,11 @@ int main(){
     }
     free(file_names);
     free(heapArray);
+    
     for(i = 0;i<n;i++){
         fclose(Files[i]);
     }
+    
     fclose(filePrinter);
     
 }

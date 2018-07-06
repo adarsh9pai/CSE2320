@@ -153,19 +153,20 @@ int main(){
 
 
        char minimum[51] = " "; 
-       while(fileExhaustionCount<n){
-        int k = 1;   
+       int k = 1;  
+       while(fileExhaustionCount<n){ 
         int extract = heapExtractMin();
         strcpy(line,heapArray[extract]);
         line[ strcspn(line, "\r\n") ] = 0;
         if(strcmp(minimum,heapArray[extract])==0){
-             k++;
+             k+=1;
         }
         else{
-            fprintf(filePrinter,"%s \n",heapArray[extract]);
+            fprintf(filePrinter,"%s %d\n",heapArray[extract],k);
             strcpy(line,heapArray[extract]);
             line[ strcspn(line, "\r\n") ] = 0;
             strcpy(minimum,line);
+            k = 0;
         }
             if(Files[extract]==NULL || feof(Files[extract])){
                 fileExhaustionCount++;

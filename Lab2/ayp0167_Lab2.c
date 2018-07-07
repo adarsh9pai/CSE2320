@@ -80,7 +80,7 @@ int heapExtractMin()
     return pq[N+1]; 
 }
 
-void Heapify(int *pq,int size, int x)
+void Heapify(int size, int x)
 {
     int Largest = x;  
     int Left = 2*x + 1; 
@@ -96,20 +96,20 @@ void Heapify(int *pq,int size, int x)
     if (Largest != x)
     {
         Exchange(pq[x], pq[Largest]);
-        Heapify(pq, size, Largest);
+        Heapify(size, Largest);
     }
 }
 
 void heapSort()
 {
-    int n = sizeof(*pq)/sizeof(int),i = 0;
-    for (int i = n / 2 - 1; i >= 0; i--)
+    int i = 0,n = sizeof(pq)/sizeof(pq[0]);
+    for (i = n / 2 - 1; i >= 0; i--)
     {
         minHeapify(pq, n, i);
     }
     {
         Exchange(pq[0], pq[i]);
-        Heapify(pq, i, 0);
+        Heapify(i, 0);
     }
 }
 
@@ -159,14 +159,14 @@ int main(){
         strcpy(line,heapArray[extract]);
         line[ strcspn(line, "\r\n") ] = 0;
         if(strcmp(minimum,heapArray[extract])==0){
-             k+=1;
+             ++k;
         }
         else{
             fprintf(filePrinter,"%s %d\n",heapArray[extract],k);
             strcpy(line,heapArray[extract]);
             line[ strcspn(line, "\r\n") ] = 0;
             strcpy(minimum,line);
-            k = 0;
+            k = 1;
         }
             if(Files[extract]==NULL || feof(Files[extract])){
                 fileExhaustionCount++;
@@ -185,16 +185,14 @@ int main(){
     for(i = 0;i<n;i++){
         free(file_names[i]);
     }
+    free(file_names);
     for(i = 0;i<n;i++){
         free(heapArray[i]);
     }
-    free(file_names);
     free(heapArray);
-    
     for(i = 0;i<n;i++){
         fclose(Files[i]);
     }
-    
     fclose(filePrinter);
     
 }

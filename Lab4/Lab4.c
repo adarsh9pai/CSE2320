@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int BlackHeight = 0;
+
 struct Node{
 	char Color;
 	struct Node* LeftChild;
@@ -33,9 +35,43 @@ void PreOrderTraversal(struct Node* Root){
 	}
 }
 
+void CheckRedProperty(struct Node* Root){
+
+	if(Root != NULL){
+		if(Root->Color == 'R'){
+			struct Node *Left = Root->LeftChild;
+			struct Node *Right = Root->RightChild;
+			if(Left != NULL){
+				if(Left->Color == 'R'){
+						printf("\nRed property problem");
+						printf("\nDoes not satisfy\n");
+						exit(0);
+				}
+			}
+			if(Right != NULL){
+				if(Right->Color == 'R'){
+						printf("\nRed property problem");
+						printf("\nDoes not satisfy\n");
+						exit(0);
+				}
+			}
+		}
+		CheckRedProperty(Root->LeftChild);
+		CheckRedProperty(Root->RightChild);
+	}
+}
+
 int main(){
+	int CheckTreeProperty = 0;
 	struct Node* TreeRoot;
 	TreeRoot = BuildTree();
 	PreOrderTraversal(TreeRoot);
-
+	if(TreeRoot->Color != 'B'){
+		printf("\nRoot of tree is not black");
+		printf("\nDoes not satisfy\n");
+		exit(0);
+	}
+	CheckRedProperty(TreeRoot);
+	
+	
 }

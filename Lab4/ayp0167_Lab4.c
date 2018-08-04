@@ -68,12 +68,13 @@ void CheckRedProperty(struct Node* Root){
 }
 
 int CheckBlackProperty(struct Node* Root){
-	if(Root == NULL){
-		return 0;
-	}
+	if(Root != NULL){
 	int LeftChildHeight = CheckBlackProperty(Root->LeftChild);
 	int RightChildHeight = CheckBlackProperty(Root->RightChild);
-	int HeightAdd = (Root->Color == 'B') ? 1 : 0;
+	int HeightAdd = 0; 
+	if(Root->Color == 'B'){
+		HeightAdd = 1;
+	}
 
 	if(LeftChildHeight == -1 || RightChildHeight == -1 || LeftChildHeight != RightChildHeight){
 		printf("\nBlack height problem");
@@ -83,6 +84,10 @@ int CheckBlackProperty(struct Node* Root){
 	}
 	else{
 		return LeftChildHeight + HeightAdd;
+	}
+	}
+	else{
+		return 0;
 	}
 }
 

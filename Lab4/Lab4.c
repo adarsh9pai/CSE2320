@@ -1,3 +1,10 @@
+/*
+Name: Adarsh Yogesh Pai
+Lab: #4
+CSE 2320
+UTA ID: 1001530167
+Omega Command: gcc ayp0167_Lab4.c -o program
+*/
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -7,6 +14,28 @@ struct Node{
 	struct Node* LeftChild;
 	struct Node* RightChild;
 };
+struct Node* BuildTree();
+void PreOrderTraversal(struct Node* Root);
+void CheckRedProperty(struct Node* Root);
+int CheckBlackProperty(struct Node* Root);
+
+
+int main(){
+
+	struct Node* TreeRoot;
+	TreeRoot = BuildTree();
+	PreOrderTraversal(TreeRoot);
+	if(TreeRoot != NULL && TreeRoot->Color != 'B'){
+		printf("\nRoot of tree is not black");
+		printf("\nDoes not satisfy\n");
+		exit(0);
+	}
+	CheckRedProperty(TreeRoot);
+	CheckBlackProperty(TreeRoot);
+
+	//If Red Property and Black Property is not valid, the program quits. If they are valid, program won't quit -> proceed to print out success message
+	printf("\nSatisfies all properties\n");	
+}
 
 struct Node* BuildTree(){
 	char Color;
@@ -61,37 +90,24 @@ void CheckRedProperty(struct Node* Root){
 }
 
 int CheckBlackProperty(struct Node* Root){
-	if(Root == NULL){
-		return 0;
-	}
+	if(Root != NULL){
 	int LeftChildHeight = CheckBlackProperty(Root->LeftChild);
 	int RightChildHeight = CheckBlackProperty(Root->RightChild);
-	int HeightAdd = (Root->Color == 'B') ? 1 : 0;
-
-	if(LeftChildHeight == -1 || RightChildHeight == -1 || LeftChildHeight != RightChildHeight){
+	if(LeftChildHeight != RightChildHeight){
 		printf("\nBlack height problem");
 		printf("\nDoes not satisfy\n");
-		exit(0);
-		return -1;
+		exit(0);		
 	}
 	else{
-		return LeftChildHeight + HeightAdd;
+		if(Root->Color == 'B'){
+			return LeftChildHeight + 1;
+		}
+		else{
+			return LeftChildHeight;
+		}
 	}
-}
-
-int main(){
-
-	struct Node* TreeRoot;
-	TreeRoot = BuildTree();
-	PreOrderTraversal(TreeRoot);
-	if(TreeRoot != NULL && TreeRoot->Color != 'B'){
-		printf("\nRoot of tree is not black");
-		printf("\nDoes not satisfy\n");
-		exit(0);
 	}
-	CheckRedProperty(TreeRoot);
-	CheckBlackProperty(TreeRoot);
-
-	//If Red Property and Black Property is not valid, the program quits. If they are valid, program won't quit -> proceed to print out success message
-	printf("\nSatisfies all properties\n");	
+	else{
+		return 0;
+	}
 }

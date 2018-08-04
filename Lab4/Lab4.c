@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int BlackHeight = 0;
 
 struct Node{
 	char Color;
@@ -61,17 +60,38 @@ void CheckRedProperty(struct Node* Root){
 	}
 }
 
+int CheckBlackProperty(struct Node* Root){
+	if(Root == NULL){
+		return 0;
+	}
+	int LeftChildHeight = CheckBlackProperty(Root->LeftChild);
+	int RightChildHeight = CheckBlackProperty(Root->RightChild);
+	int HeightAdd = (Root->Color == 'B') ? 1 : 0;
+
+	if(LeftChildHeight == -1 || RightChildHeight == -1 || LeftChildHeight != RightChildHeight){
+		printf("\nBlack height problem");
+		printf("\nDoes not satisfy\n");
+		exit(0);
+		return -1;
+	}
+	else{
+		return LeftChildHeight + HeightAdd;
+	}
+}
+
 int main(){
-	int CheckTreeProperty = 0;
+
 	struct Node* TreeRoot;
 	TreeRoot = BuildTree();
 	PreOrderTraversal(TreeRoot);
-	if(TreeRoot->Color != 'B'){
+	if(TreeRoot != NULL && TreeRoot->Color != 'B'){
 		printf("\nRoot of tree is not black");
 		printf("\nDoes not satisfy\n");
 		exit(0);
 	}
 	CheckRedProperty(TreeRoot);
-	
-	
+	CheckBlackProperty(TreeRoot);
+
+	//If Red Property and Black Property is not valid, the program quits. If they are valid, program won't quit -> proceed to print out success message
+	printf("\nSatisfies all properties\n");	
 }

@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#define PLACHOLDER_NUMBER INT_MAX
+#define PLACEHOLDER_NUMBER INT_MAX
 #define NEGATIVE_PLACEHOLDER_NUMBER -1
 #define NEW_LINE printf("\n")
 #define BORDER printf("-------------------------------\n")
